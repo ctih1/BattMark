@@ -9,6 +9,7 @@ private:
 	void OnTimer(wxTimerEvent& evt);
 	void OnSize(wxSizeEvent& evt);
 	void UpdateSizes(wxSize windowSize);
+	void OnCheckboxChange(wxCommandEvent& evt);
 	UINT8 GetPercentage();
 	char* GetTime();
 	wxGauge* batteryBar;
@@ -20,5 +21,6 @@ private:
 	wxFont timeTextFont;
 	const int buttonMargin=100;
 	const int buttonDownDistance=40;
+	bool preventSleep=false;
 };
 

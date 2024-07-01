@@ -9,12 +9,14 @@ MainFrame::MainFrame(const wxString& title):wxFrame(nullptr,wxID_ANY, title) {
 	int screenY;
 	int screenX;
 	this->GetSize(&screenX, &screenY);
-	wxLogDebug("Size: %d",screenX);
-	timeText = new wxStaticText(panel, wxID_ANY, GetTime(), wxPoint(0, 50), wxSize(screenX, 50), wxALIGN_CENTER_HORIZONTAL);
 
+	timeText = new wxStaticText(panel, wxID_ANY, GetTime(), wxPoint(0, 50), wxSize(screenX, 50), wxALIGN_CENTER_HORIZONTAL);
+	wxCheckBox* mouseJiggler = new wxCheckBox(panel, wxID_ANY, "Prevent sleep", wxPoint(10, screenY - 40), wxSize(100, 20));
 	batteryPercentage = new wxStaticText(panel, wxID_ANY, "0%", wxPoint(screenX-buttonMargin,screenY/2), wxSize(50, 20));
 	batteryBar = new wxGauge(panel, wxID_ANY, 100, wxPoint(buttonMargin, screenY / 2), wxSize(screenX - buttonMargin*2, 30));
 	timer = new wxTimer(this);
+	
+	mouseJiggler->Bind(wxEVT_CHECKBOX, &MainFrame::OnCheckboxChange,this);
 
 	this->Bind(wxEVT_TIMER, &MainFrame::OnTimer, this);
 	this->Bind(wxEVT_SIZE, &MainFrame::OnSize, this);
@@ -61,3 +63,9 @@ void MainFrame::OnSize(wxSizeEvent& evt) {
 	UpdateSizes(evt.GetSize());
 }
 
+
+void MainFrame::OnCheckboxChange(wxCommandEvent& evt) {
+	preventSleep=!preventSleep;
+	if(preventSleep) { SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED); }
+	else { SetThreadExecutionState(ES_CONTINUOUS); }
+}
