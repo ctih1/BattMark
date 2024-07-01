@@ -27,7 +27,6 @@ void MainFrame::OnTimer(wxTimerEvent& evt) {
 	batteryBar->SetValue(percentage);
 	timeText->SetLabel(GetTime());
 	timeText->SetSize(timeTextSize);
-	timeText->SetFont(timeTextFont);
 }
 
 char* MainFrame::GetTime() {
@@ -47,11 +46,11 @@ UINT8 MainFrame::GetPercentage() {
 void MainFrame::UpdateSizes(wxSize windowSize) {
 	panel->SetSize(windowSize);
 	batteryBar->SetPosition(wxPoint(buttonMargin, windowSize.y-(windowSize.y/8) - buttonMargin));
-	batteryBar->SetSize(wxSize(windowSize.x - buttonMargin * 2, windowSize.y/8));
-	batteryPercentage->SetPosition(wxPoint(windowSize.x - buttonMargin, batteryBar->GetPosition().y));
+	batteryBar->SetSize(wxSize((windowSize.x - buttonMargin * 2)-(windowSize.y/20)*3, windowSize.y/8));
+	batteryPercentage->SetPosition(wxPoint(windowSize.x - buttonMargin - (windowSize.y / 20) * 3, batteryBar->GetPosition().y));
 	wxFont font = batteryPercentage->GetFont(); font.SetPointSize(windowSize.y/20); batteryPercentage->SetFont(font);
 	timeTextFont = timeText->GetFont();
-	timeTextFont.SetPointSize(windowSize.y / 22);
+	timeTextFont.SetPointSize(std::min(windowSize.y / 22,35));
 	timeTextSize = wxSize(windowSize.x, 50);
 	timeText->SetSize(timeTextSize);
 	timeText->SetFont(timeTextFont);
